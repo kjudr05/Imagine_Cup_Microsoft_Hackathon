@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "microsoft-cognitiveservices-speech-sdk": "^1.47.0",
+    "ws": "^8.18.3"
+  }
+}

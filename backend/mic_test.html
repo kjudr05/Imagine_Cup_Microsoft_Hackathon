@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h2>Mic Test</h2>
+    <button onclick="start()">Start</button>
+
+    <script>
+      async function start() {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const ws = new WebSocket("ws://localhost:3001");
+
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)({
+  sampleRate: 16000
+});
+await audioContext.resume();
+
+        const source = audioContext.createMediaStreamSource(stream);
+        const processor = audioContext.createScriptProcessor(4096, 1, 1);
+
+        source.connect(processor);
+        processor.connect(audioContext.destination);
+
+        ws.onopen = () => {
+          processor.onaudioprocess = (e) => {
+            const input = e.inputBuffer.getChannelData(0);
+            const buffer = new ArrayBuffer(input.length * 2);
+            const view = new DataView(buffer);
+
+            let offset = 0;
+            for (let i = 0; i < input.length; i++, offset += 2) {
+              let s = Math.max(-1, Math.min(1, input[i]));
+              view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+            }
+
+            ws.send(buffer);
+          };
+        };
+      }
+    </script>
+  </body>
+</html>

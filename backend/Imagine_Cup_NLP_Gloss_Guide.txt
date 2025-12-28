@@ -1,0 +1,149 @@
+IMAGINE CUP – REAL-TIME SIGN LANGUAGE TRANSLATOR
+STEP-BY-STEP GUIDE (BEGINNER FRIENDLY)
+
+ROLE: NLP / GLOSS LEAD (TEAMMATE 2)
+
+--------------------------------------------------
+1. PROJECT OVERVIEW
+--------------------------------------------------
+Goal:
+Convert live speech into Sign Language gloss that can drive an avatar.
+
+Pipeline:
+Speech → Azure Speech → Text → NLP (YOU) → Gloss → Avatar
+
+You DO NOT handle:
+- Microphone
+- Audio streaming
+- Azure Speech setup
+
+You ONLY handle:
+- Text processing
+- Gloss generation
+- Sending gloss forward
+
+--------------------------------------------------
+2. PREREQUISITES
+--------------------------------------------------
+- Node.js installed
+- Backend server (server.js) running on port 3001
+- WebSocket library installed (ws)
+
+Folder structure:
+backend/
+ ├── server.js
+ ├── nlp_client.js
+ ├── package.json
+ ├── node_modules/
+ └── .env
+
+--------------------------------------------------
+3. START THE BACKEND (REQUIRED)
+--------------------------------------------------
+Open Terminal 1 inside backend folder:
+
+node server.js
+
+You MUST see:
+Speech server running at http://localhost:3001
+
+DO NOT close this terminal.
+
+--------------------------------------------------
+4. CREATE NLP CLIENT
+--------------------------------------------------
+Create a file named:
+
+nlp_client.js
+
+Paste the FINAL code provided by ChatGPT.
+
+--------------------------------------------------
+5. RUN NLP CLIENT
+--------------------------------------------------
+Open Terminal 2 inside backend folder:
+
+node nlp_client.js
+
+Expected output:
+NLP client connected
+
+--------------------------------------------------
+6. HOW NLP WORKS
+--------------------------------------------------
+Input from backend:
+{
+  type: "speech",
+  text: "What is your name?"
+}
+
+Processing steps:
+1. Clean text
+2. Remove punctuation
+3. Remove filler and helper words
+4. Apply sign language grammar
+5. Convert to gloss
+
+--------------------------------------------------
+7. SIGN LANGUAGE RULES USED
+--------------------------------------------------
+- Remove: is, am, are, the, a, an
+- Convert pronouns:
+  I / my → ME
+  you / your → YOU
+- Question words go at END
+
+Examples:
+"My name is Kavya Jain"
+→ ME NAME KAVYA JAIN
+
+"What is your name?"
+→ YOUR NAME WHAT
+
+"I will go tomorrow"
+→ ME TOMORROW GO
+
+--------------------------------------------------
+8. FINAL OUTPUT FORMAT
+--------------------------------------------------
+Gloss payload sent forward:
+
+{
+  "type": "gloss",
+  "sequence": ["YOUR", "NAME", "WHAT"],
+  "timestamp": 1710000000000
+}
+
+This is what avatar system consumes.
+
+--------------------------------------------------
+9. TESTING CHECKLIST
+--------------------------------------------------
+✔ server.js running
+✔ nlp_client.js running
+✔ mic_test.html started
+✔ Speech text appears
+✔ Gloss appears correctly
+
+--------------------------------------------------
+10. COMMON ERRORS
+--------------------------------------------------
+Error: ECONNREFUSED
+→ server.js is NOT running
+
+Wrong gloss order
+→ Question word logic missing
+
+Uppercase English output
+→ Grammar rules not applied
+
+--------------------------------------------------
+11. NEXT STEP
+--------------------------------------------------
+Avatar Integration:
+Gloss → Animation mapping
+(Unity or Web-based avatar)
+
+--------------------------------------------------
+END OF GUIDE
+--------------------------------------------------
